@@ -36,7 +36,7 @@ app.post('/login', authenticationUser, async (req, res) => {
 });
 
 // get new access toekn
-app.post('/accesstoekn', async (req, res) => {
+app.post('/auth/accesstoekn', async (req, res) => {
   const refreshToken = req.body.token;
   if (refreshToken === null) return res.sendStatus(401);
   const isInDatabase = await userModels.findOne({ token: refreshToken });
@@ -48,6 +48,19 @@ app.post('/accesstoekn', async (req, res) => {
     const accessToken = genarateAccessToken(user);
     res.json({ accessToken: accessToken });
   });
+});
+
+// delete refresh token
+app.delete('/auth/logout', async (req, res) => {
+  try {
+    const findeToken = await userModels.findOne({ token: req.body.token });
+    findeToken.token = '';
+    const deleteToken = await findeToken.save();
+    if (!deleteToken) return res.sendStatus(403);
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(error);
+  }
 });
 
 //
