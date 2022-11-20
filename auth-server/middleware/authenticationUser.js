@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-
 const userModels = require('../models/models');
 
 async function authenticationUser(req, res, next) {
