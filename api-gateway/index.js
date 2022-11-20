@@ -15,7 +15,6 @@ app.use(
 );
 
 // middleware
-app.use(express.json());
 
 // routes
 
