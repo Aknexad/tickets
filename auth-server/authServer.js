@@ -13,7 +13,7 @@ require('./middleware/conneectDatabase');
 app.use(express.json());
 
 // routes
-app.post('/login', authenticationUser, async (req, res) => {
+app.post('/auth/login', authenticationUser, async (req, res) => {
   try {
     const payload = req.payload;
     const accessToken = genarateAccessToken(payload);
@@ -66,6 +66,19 @@ app.delete('/auth/logout', async (req, res) => {
 //
 function genarateAccessToken(payload) {
   return jwt.sign(payload, process.env.ACCESS_TOKEN, { expiresIn: '30s' });
+}
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader.split(' ')[1];
+
+  if (token == null) return res.status(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
+    if (err) return res.send(403);
+    req.user = user;
+    next();
+  });
 }
 
 // server
