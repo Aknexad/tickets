@@ -29,8 +29,11 @@ app.get('/user', async (req, res) => {
 });
 
 app.post('/user/register', async (req, res) => {
-  const user = new userModels(req.body);
   try {
+    const user = await userModels.create({
+      username: req.body.username,
+      passowrd: req.body.passowrd,
+    });
     await user.save();
     res.send(user);
   } catch (error) {
