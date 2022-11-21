@@ -22,6 +22,14 @@ app.use(
   })
 );
 
+app.use(
+  '/match',
+  createProxyMiddleware({
+    target: 'http://localhost:4040/',
+    changeOrigin: true,
+  })
+);
+
 // middleware
 
 // routes
