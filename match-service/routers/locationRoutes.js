@@ -1,22 +1,33 @@
 const express = require('express');
 
-const db = require('../models/data');
+const { Location } = require('../models/models');
 
-const route = express.Router();
+const router = express.Router();
 
-route.get('/', (req, res) => {
-  res.json(db.location);
+router.get('/', async (req, res) => {
+  try {
+    const locations = await Location.find();
+    res.json(locations);
+  } catch (error) {
+    res.json(error);
+  }
 });
 
-route.post('/', (req, res) => {
-  const location = req.body.location;
-  db.location.push(location);
-  res.send('done');
+router.post('/', async (req, res) => {
+  // try {
+  //   const locationInfo = {
+  //     city:req.body.city,
+  //     stadium:{
+  //     }
+  //   }
+  //   const addLocation =
+  // } catch (error) {
+  // }
 });
-route.delete('/', (req, res) => {
+router.delete('/', (req, res) => {
   const location = req.body.location;
   db.location.findIndex(time => time === location);
   res.send('location remove');
 });
 
-module.exports = route;
+module.exports = router;

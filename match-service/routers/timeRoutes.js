@@ -1,22 +1,41 @@
 const express = require('express');
 
-const db = require('../models/data');
+const teamModels = require('../models/models').Team;
 
-const route = express.Router();
+const router = express.Router();
 
-route.get('/', (req, res) => {
-  res.json(db.time);
+router.get('/', async (req, res) => {
+  try {
+    const getTeams = await teamModels.find();
+    if (!getTeams) return res.send('no team find');
+    res.send(getTeams);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
-route.post('/', (req, res) => {
-  const timeName = req.body.name;
-  db.time.push(timeName);
-  res.send('done');
+router.post('/', async (req, res) => {
+  try {
+    const teamName = req.body.name;
+    const addTeam = await teamModels.create({
+      name: teamName,
+    });
+    await addTeam.save();
+    if (!addTeam) return res.send('try agen');
+    res.json({ message: 'done', team: addTeam });
+  } catch (error) {
+    res.send(error);
+  }
 });
-route.delete('/', (req, res) => {
-  const timeName = req.body.name;
-  db.time.findIndex(time => time === timeName);
-  res.send('time remove');
+router.delete('/', async (req, res) => {
+  try {
+    const teamName = req.body.name;
+    const deleteTeam = await teamModels.deleteOne({ name: teamName });
+    if (!deleteTeam) return res.send('sumthing go roung');
+    res.json({ message: 'done', team: deleteTeam });
+  } catch (error) {
+    res.json(error);
+  }
 });
 
-module.exports = route;
+module.exports = router;

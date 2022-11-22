@@ -1,22 +1,40 @@
 const express = require('express');
 
-const db = require('../models/data');
+const { Stadium } = require('../models/models');
 
-const route = express.Router();
+const router = express.Router();
 
-route.get('/', (req, res) => {
-  res.json(db.stadume);
+router.get('/', async (req, res) => {
+  try {
+    const allStadium = await Stadium.find();
+    res.send(allStadium);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
-route.post('/', (req, res) => {
-  const stadume = req.body.stadume;
-  db.stadume.push(stadume);
-  res.send('done');
+router.post('/', async (req, res) => {
+  try {
+    const addStadium = await Stadium.create({
+      name: req.body.name,
+      capacity: req.body.capacity,
+      location: req.body.location,
+    });
+    res.json({ messge: 'done', stadium: addStadium });
+  } catch (error) {
+    res.json(error);
+  }
 });
-route.delete('/', (req, res) => {
-  const stadume = req.body.stadume;
-  db.stadume.findIndex(time => time === stadume);
-  res.send('stadume remove');
+router.delete('/', async (req, res) => {
+  try {
+    const id = req.body.id;
+    const deleteStadium = await Stadium.deleteOne({ _id: id });
+    console.log(deleteStadium);
+    if (deleteStadium.deletedCount === 0) return res.sendStatus(400);
+    res.sendStatus(200);
+  } catch (error) {
+    res.json(error);
+  }
 });
 
-module.exports = route;
+module.exports = router;
