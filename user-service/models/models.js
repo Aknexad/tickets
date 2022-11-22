@@ -5,7 +5,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   passowrd: { type: String, required: true },
 
   token: { type: String },

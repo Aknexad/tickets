@@ -59,7 +59,7 @@ app.delete('/auth/logout', async (req, res) => {
     if (!deleteToken) return res.sendStatus(403);
     res.sendStatus(200);
   } catch (error) {
-    res.sendStatus(error);
+    res.send(error);
   }
 });
 

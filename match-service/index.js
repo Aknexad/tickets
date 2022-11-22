@@ -16,7 +16,7 @@ const app = express();
 // middleware
 app.use(express.json());
 
-// Routers
+// Routerss
 app.use('/match', matchRoutes);
 app.use('/match/team', teamRoutes);
 // app.use('/match/location', locationRoutes);
