@@ -30,6 +30,13 @@ app.use(
   })
 );
 
+app.use(
+  '/ticket',
+  createProxyMiddleware({
+    target: 'http://localhost:4050/',
+    changeOrigin: true,
+  })
+);
 // middleware
 
 // routes
