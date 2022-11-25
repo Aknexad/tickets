@@ -23,15 +23,34 @@ app.get('/ticket/all', async (req, res) => {
 
 app.get('/ticket/my', async (req, res) => {
   try {
-    res.send('my tickets');
-  } catch (error) {}
+    const userId = req.body.id;
+    const userTickets = await ticketModels.find({
+      _id: userId,
+    });
+    res.json(userTickets);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.post('/ticket', async (req, res) => {
+  const userId = req.body.userid;
+  const matchId = req.body.matchId;
+  const addTicket = await ticketModels.create({
+    userId: userId,
+    matchId: matchId,
+    ticketStatus: false,
+  });
+  if (addTicket) {
+    res.json(addTicket);
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 function auth(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader.split(' ')[1];
-  console.log(authHeader);
-  console.log(token);
 
   if (token === null || token === undefined) return res.status(401);
   console.log(req.body);

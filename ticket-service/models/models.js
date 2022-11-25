@@ -15,6 +15,10 @@ const TicketListSchema = new schema({
     type: Boolean,
     required: true,
   },
+  price: {
+    type: Number,
+    required: true,
+  },
 });
 
 const TicketList = mongoose.model('TicketList', TicketListSchema);
