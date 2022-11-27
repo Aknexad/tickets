@@ -5,7 +5,6 @@ require('dotenv').config();
 //
 const matchRoutes = require('./routers/matchRoutes');
 const teamRoutes = require('./routers/timeRoutes');
-// const locationRoutes = require('./routers/locationRoutes');
 const stadiumRoutes = require('./routers/stadumRoutes');
 
 const authenticateToken = require('./middleware/authenticateToken');
