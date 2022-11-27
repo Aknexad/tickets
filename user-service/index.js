@@ -24,6 +24,9 @@ app.use(express.json());
 
 // routes
 app.get('/user', async (req, res) => {
+  res.send('userdash');
+});
+app.get('/user/all', async (req, res) => {
   const allUsers = await userModels.find();
   res.send(allUsers);
 });
