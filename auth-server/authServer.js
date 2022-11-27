@@ -1,8 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const userModels = require('./models/models');
-const authenticationUser = require('./middleware/authenticationUser');
+const authenticateToken = require('./middleware/authenticateToken');
 
 require('dotenv').config();
 const app = express();
@@ -12,31 +11,8 @@ require('./middleware/conneectDatabase');
 // middleware
 app.use(express.json());
 
-// routes
-app.post('/auth/login', authenticationUser, async (req, res) => {
-  try {
-    const payload = req.payload;
-    const accessToken = genarateAccessToken(payload);
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN);
-    const pushToDb = await userModels
-      .where({ _id: payload.id })
-      .update({ token: refreshToken });
-    if (pushToDb) {
-      res.json({
-        userInfo: payload,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      });
-    } else {
-      res.sendStatus(503);
-    }
-  } catch (error) {
-    res.sendStatus(503);
-  }
-});
-
 // get new access toekn
-app.post('/auth/accesstoekn', async (req, res) => {
+app.post('/auth/accesstoekn', authenticateToken, async (req, res) => {
   const refreshToken = req.body.token;
   if (refreshToken === null) return res.sendStatus(401);
   const isInDatabase = await userModels.findOne({ token: refreshToken });
@@ -50,35 +26,9 @@ app.post('/auth/accesstoekn', async (req, res) => {
   });
 });
 
-// delete refresh token
-app.delete('/auth/logout', async (req, res) => {
-  try {
-    const findeToken = await userModels.findOne({ token: req.body.token });
-    findeToken.token = '';
-    const deleteToken = await findeToken.save();
-    if (!deleteToken) return res.sendStatus(403);
-    res.sendStatus(200);
-  } catch (error) {
-    res.send(error);
-  }
-});
-
 //
 function genarateAccessToken(payload) {
   return jwt.sign(payload, process.env.ACCESS_TOKEN, { expiresIn: '30s' });
-}
-
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader.split(' ')[1];
-
-  if (token == null) return res.status(401);
-
-  jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
-    if (err) return res.send(403);
-    req.user = user;
-    next();
-  });
 }
 
 // server

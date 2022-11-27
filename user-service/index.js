@@ -1,48 +1,27 @@
 const express = require('express');
-const mongoose = require('mongoose');
-
+//
+const authenticationUser = require('./middleware/authenticationUser');
+const authenticateToken = require('./middleware/authenticateToken');
 const userModels = require('./models/models');
+const dashRoute = require('./routers/dashboard');
+const registerRoute = require('./routers/register');
+const loginRoute = require('./routers/login');
+const logoutRoute = require('./routers/logout');
 
 require('dotenv').config();
 
 const app = express();
 
 // conneect DB
-mongoose.connect('mongodb://localhost:27017/user_service', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error: '));
-db.once('open', function () {
-  console.log('Connected successfully');
-});
-
+require('./middleware/connectToDb');
 // middleware
 app.use(express.json());
 
 // routes
-app.get('/user', async (req, res) => {
-  res.send('userdash');
-});
-app.get('/user/all', async (req, res) => {
-  const allUsers = await userModels.find();
-  res.send(allUsers);
-});
-
-app.post('/user/register', async (req, res) => {
-  try {
-    const user = await userModels.create({
-      username: req.body.username,
-      passowrd: req.body.passowrd,
-    });
-    await user.save();
-    res.send(user);
-  } catch (error) {
-    res.send(error);
-  }
-});
+app.use('/user/dash', authenticationUser, dashRoute);
+app.use('/user/register', registerRoute);
+app.use('/user/login', authenticationUser, loginRoute);
+app.use('/user/logout', authenticateToken, logoutRoute);
 
 // server
 const port = process.env.PORT || 4000;
