@@ -1,6 +1,7 @@
 const express = require('express');
 
 const route = express.Router();
+const authenticateToken = require('../middleware/authenticateToken');
 
 const { Match, Team, Stadium } = require('../models/models');
 
@@ -10,7 +11,7 @@ route.get('/all', async (req, res) => {
   res.send(matchs);
 });
 
-route.get('/', async (req, res) => {
+route.get('/', authenticateToken, async (req, res) => {
   try {
     const teams = await Team.find();
     const stadiums = await Stadium.find();
@@ -22,7 +23,7 @@ route.get('/', async (req, res) => {
   }
 });
 
-route.post('/', async (req, res) => {
+route.post('/', authenticateToken, async (req, res) => {
   try {
     const createMatch = await Match.create({
       matchType: req.body.matchType,
@@ -40,7 +41,7 @@ route.post('/', async (req, res) => {
   }
 });
 
-route.delete('/', async (req, res) => {
+route.delete('/', authenticateToken, async (req, res) => {
   try {
     const id = req.body.id;
     const deletMatch = await Match.deleteOne({ _id: id });

@@ -17,6 +17,10 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const teamName = req.body.name;
+
+    const nameChack = await teamModels.findOne({ name: teamName });
+    if (nameChack) return res.send('team already added');
+
     const addTeam = await teamModels.create({
       name: teamName,
     });
@@ -27,10 +31,11 @@ router.post('/', async (req, res) => {
     res.send(error);
   }
 });
+
 router.delete('/', async (req, res) => {
   try {
-    const teamName = req.body.name;
-    const deleteTeam = await teamModels.deleteOne({ name: teamName });
+    const teamId = req.body.id;
+    const deleteTeam = await teamModels.deleteOne({ _id: teamId });
     if (!deleteTeam) return res.send('sumthing go roung');
     res.json({ message: 'done', team: deleteTeam });
   } catch (error) {

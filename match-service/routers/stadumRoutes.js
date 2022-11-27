@@ -15,6 +15,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    const stadiumCeack = await Stadium.findOne({ name: req.body.name });
+    if (stadiumCeack) return res.send('stadim already added');
+
     const addStadium = await Stadium.create({
       name: req.body.name,
       capacity: req.body.capacity,

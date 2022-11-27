@@ -7,6 +7,8 @@ const UserSchema = new mongoose.Schema({
   },
   passowrd: { type: String, required: true },
 
+  isAdmin: Boolean,
+
   token: { type: String },
 });
 
