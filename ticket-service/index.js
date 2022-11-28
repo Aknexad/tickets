@@ -7,6 +7,8 @@ require('./middleware/connectToDb');
 
 const ticketModels = require('./models/models');
 
+const userAuthToken = require('./middleware/authenticateToken');
+
 const app = express();
 
 // middleware
@@ -21,9 +23,9 @@ app.get('/ticket/all', async (req, res) => {
   }
 });
 
-app.get('/ticket/my', async (req, res) => {
+app.get('/ticket/my', userAuthToken, async (req, res) => {
   try {
-    const userId = req.body.id;
+    const userId = req.user.id;
     const userTickets = await ticketModels.find({
       _id: userId,
     });
@@ -33,8 +35,8 @@ app.get('/ticket/my', async (req, res) => {
   }
 });
 
-app.post('/ticket', async (req, res) => {
-  const userId = req.body.userid;
+app.post('/ticket', userAuthToken, async (req, res) => {
+  const userId = req.user.id;
   const matchId = req.body.matchId;
   const addTicket = await ticketModels.create({
     userId: userId,
@@ -47,14 +49,5 @@ app.post('/ticket', async (req, res) => {
     res.sendStatus(400);
   }
 });
-
-function auth(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader.split(' ')[1];
-
-  if (token === null || token === undefined) return res.status(401);
-  console.log(req.body);
-  next();
-}
 
 app.listen(process.env.PORT, () => console.log('tickets service is running'));
