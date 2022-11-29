@@ -8,11 +8,14 @@ require('./middleware/connectToDb');
 const ticketModels = require('./models/models');
 
 const userAuthToken = require('./middleware/authenticateToken');
+const subscriber = require('./utils/subscriber');
 
 const app = express();
 
 // middleware
 app.use(express.json());
+
+subscriber();
 
 app.get('/ticket/all', async (req, res) => {
   try {

@@ -2,12 +2,14 @@ const express = require('express');
 
 const route = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
+const publisher = require('../utils/publisher');
 
 const { Match, Team, Stadium } = require('../models/models');
 
 // match
 route.get('/all', async (req, res) => {
   const matchs = await Match.find();
+  publisher(matchs);
   res.send(matchs);
 });
 
