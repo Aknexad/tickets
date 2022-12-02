@@ -15,8 +15,6 @@ const app = express();
 // middleware
 app.use(express.json());
 
-subscriber();
-
 app.get('/ticket/all', async (req, res) => {
   try {
     const allMatch = await ticketModels.find();

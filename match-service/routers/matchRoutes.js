@@ -4,22 +4,26 @@ const route = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
 const publisher = require('../utils/publisher');
 
-const { Match, Team, Stadium } = require('../models/models');
+const { Match, Team, Stadium, MatchType } = require('../models/models');
 
 // match
 route.get('/all', async (req, res) => {
   const matchs = await Match.find();
-  publisher(matchs);
   res.send(matchs);
 });
 
-route.get('/', authenticateToken, async (req, res) => {
+route.get('/', async (req, res) => {
   try {
+    const matchType = await MatchType.find();
     const teams = await Team.find();
     const stadiums = await Stadium.find();
-    const city = [];
-    stadiums.forEach(st => city.push(st.location));
-    res.json({ teams: teams, stadiums: stadiums, location: city });
+
+    res.json({
+      matchType: matchType,
+      teams: teams,
+      stadiums: stadiums,
+      location: [stadiums.map(st => st.location)],
+    });
   } catch (error) {
     res.send(error);
   }
@@ -32,7 +36,7 @@ route.post('/', authenticateToken, async (req, res) => {
       host: req.body.host,
       visitor: req.body.visitor,
       stadium: req.body.stadium,
-      author: 'admin1',
+      author: req.user.username,
       totalTickets: '100',
       remainingTickets: '45',
     });
@@ -47,7 +51,6 @@ route.delete('/', authenticateToken, async (req, res) => {
   try {
     const id = req.body.id;
     const deletMatch = await Match.deleteOne({ _id: id });
-    console.log(deletMatch);
     if (deletMatch.deletedCount === 0) return res.sendStatus(400);
     res.sendStatus(200);
   } catch (error) {
