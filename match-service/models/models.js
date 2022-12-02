@@ -2,32 +2,6 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema;
 
-const MatchSchema = new schema({
-  matchType: {
-    type: String,
-    required: true,
-  },
-  host: {
-    type: String,
-    required: true,
-  },
-  visitor: {
-    type: String,
-    required: true,
-  },
-  stadium: {
-    type: String,
-    required: true,
-  },
-  dateAndTime: {
-    type: Date,
-    default: Date.now(),
-  },
-  author: { type: String, required: true },
-  totalTickets: Number,
-  remainingTickets: Number,
-});
-
 const TeamSchema = new schema({
   name: {
     type: String,
@@ -35,7 +9,7 @@ const TeamSchema = new schema({
   },
 });
 
-const LocationSchema = new schema({
+const MatchTypeSchema = new schema({
   name: {
     type: String,
     required: true,
@@ -57,9 +31,31 @@ const StadiumSchema = new schema({
   },
 });
 
+const MatchSchema = new schema({
+  matchType: {
+    type: String,
+    required: true,
+  },
+  host: {
+    type: String,
+    required: true,
+  },
+  visitor: {
+    type: String,
+    required: true,
+  },
+  stadium: [{ type: Object, ref: StadiumSchema }],
+  dateAndTime: {
+    type: Date,
+    default: Date.now(),
+  },
+  author: { type: String, required: true },
+  totalTickets: Number,
+  remainingTickets: Number,
+});
 const Match = mongoose.model('Match', MatchSchema);
 const Team = mongoose.model('Team', TeamSchema);
-const Location = mongoose.model('Locarion', LocationSchema);
+const MatchType = mongoose.model('MatchType', MatchTypeSchema);
 const Stadium = mongoose.model('Stadium', StadiumSchema);
 
-module.exports = { Match, Team, Location, Stadium };
+module.exports = { Match, Team, Stadium, MatchType };
