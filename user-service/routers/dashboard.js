@@ -6,6 +6,8 @@ const subscriber = require('../utils/subscriber');
 
 const route = express.Router();
 
+subscriber();
+
 route.get('/', async (req, res) => {
   res.send('userdash');
 });
@@ -15,7 +17,7 @@ route.get('/all', async (req, res) => {
   res.send(allUsers);
 });
 
-route.get('/myTickets', eventHandler, async (req, res) => {
+route.get('/myTickets', async (req, res) => {
   const myTickets = await userModels.findOne({ _id: req.user.id });
   if (myTickets.tickets.length === 0)
     return res.send('you dont have aby tickets');
@@ -23,7 +25,6 @@ route.get('/myTickets', eventHandler, async (req, res) => {
 });
 
 function eventHandler(req, res, next) {
-  subscriber(req.user.id);
   next();
 }
 

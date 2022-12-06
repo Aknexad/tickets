@@ -48,8 +48,8 @@ app.post('/ticket', userAuthToken, async (req, res) => {
     ticketStatus: false,
   });
   if (addTicket) {
-    res.json(addTicket);
     publisher(addTicket);
+    res.json(addTicket);
   } else {
     res.sendStatus(400);
   }
