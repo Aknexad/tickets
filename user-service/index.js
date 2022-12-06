@@ -18,7 +18,7 @@ require('./middleware/connectToDb');
 app.use(express.json());
 
 // routes
-app.use('/user/dash', authenticationUser, dashRoute);
+app.use('/user/dash', authenticateToken, dashRoute);
 app.use('/user/register', registerRoute);
 app.use('/user/login', authenticationUser, loginRoute);
 app.use('/user/logout', authenticateToken, logoutRoute);

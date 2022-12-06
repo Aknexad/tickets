@@ -52,6 +52,7 @@ const MatchSchema = new schema({
   author: { type: String, required: true },
   totalTickets: Number,
   remainingTickets: Number,
+  tickets: [],
 });
 const Match = mongoose.model('Match', MatchSchema);
 const Team = mongoose.model('Team', TeamSchema);

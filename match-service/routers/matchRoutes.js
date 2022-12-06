@@ -12,7 +12,7 @@ route.get('/all', async (req, res) => {
   res.send(matchs);
 });
 
-route.get('/', async (req, res) => {
+route.get('/', authenticateToken, async (req, res) => {
   try {
     const matchType = await MatchType.find();
     const teams = await Team.find();

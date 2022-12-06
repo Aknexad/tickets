@@ -3,6 +3,15 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const TicketListSchema = new schema({
+  userId: {
+    type: String,
+    required: true,
+  },
+  username: {
+    type: String,
+    require: true,
+  },
+
   matchId: {
     type: String,
     required: true,
@@ -14,6 +23,7 @@ const TicketListSchema = new schema({
   price: {
     type: Number,
     required: true,
+    default: 20,
   },
 });
 
