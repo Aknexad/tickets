@@ -24,8 +24,4 @@ route.get('/myTickets', async (req, res) => {
   res.send(myTickets.tickets);
 });
 
-function eventHandler(req, res, next) {
-  next();
-}
-
 module.exports = route;

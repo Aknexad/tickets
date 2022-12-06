@@ -12,11 +12,9 @@ require('./middleware/conneectDatabase');
 app.use(express.json());
 
 // get new access toekn
-app.post('/auth/accesstoekn', authenticateToken, async (req, res) => {
+app.post('/auth/accesstoekn', async (req, res) => {
   const refreshToken = req.body.token;
   if (refreshToken === null) return res.sendStatus(401);
-  const isInDatabase = await userModels.findOne({ token: refreshToken });
-  if (!isInDatabase) return res.sendStatus(403);
 
   //   jwt verfy and response new toekn
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {

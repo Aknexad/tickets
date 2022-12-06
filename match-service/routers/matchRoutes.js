@@ -40,7 +40,6 @@ route.post('/', authenticateToken, async (req, res) => {
       totalTickets: '100',
       remainingTickets: '45',
     });
-
     res.json({ message: 'OK', info: createMatch });
   } catch (error) {
     res.send(error);
