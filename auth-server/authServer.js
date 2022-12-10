@@ -1,13 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const authenticateToken = require('./middleware/authenticateToken');
-
+// config file
 require('dotenv').config();
+
 const app = express();
 
-// conneect DB
-require('./middleware/conneectDatabase');
 // middleware
 app.use(express.json());
 

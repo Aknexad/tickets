@@ -2,6 +2,7 @@ const express = require('express');
 //
 const authenticationUser = require('./middleware/authenticationUser');
 const authenticateToken = require('./middleware/authenticateToken');
+//
 const dashRoute = require('./routers/dashboard');
 const registerRoute = require('./routers/register');
 const loginRoute = require('./routers/login');

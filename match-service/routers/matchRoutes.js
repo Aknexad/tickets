@@ -10,7 +10,7 @@ const { Match, Team, Stadium, MatchType } = require('../models/models');
 subscriber();
 
 // match
-route.get('/all', async (req, res) => {
+route.get('/all', authenticateToken, async (req, res) => {
   const matchs = await Match.find();
   res.send(matchs);
 });

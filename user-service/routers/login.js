@@ -12,7 +12,7 @@ route.post('/', async (req, res) => {
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN);
     const pushToDb = await userModels
       .where({ _id: payload.id })
-      .update({ token: refreshToken });
+      .updateOne({ token: refreshToken });
     if (pushToDb) {
       res.json({
         userInfo: payload,

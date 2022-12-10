@@ -10,6 +10,7 @@ const {
   userAuthToken,
   adminAuthToken,
 } = require('./middleware/authenticateToken');
+//
 const publisher = require('./utils/publisher');
 const subscriber = require('./utils/subscriber');
 
@@ -25,19 +26,6 @@ app.get('/ticket/all', adminAuthToken, async (req, res) => {
   } catch (error) {
     res.send(error);
   }
-});
-
-app.get('/ticket/my', userAuthToken, async (req, res) => {
-  res.send('send to user db');
-  // try {
-  //   const userId = req.user.id;
-  //   const userTickets = await ticketModels.find({
-  //     _id: userId,
-  //   });
-  //   res.json(userTickets);
-  // } catch (error) {
-  //   res.send(error);
-  // }
 });
 
 app.post('/ticket', userAuthToken, async (req, res) => {

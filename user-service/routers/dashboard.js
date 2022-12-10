@@ -4,6 +4,8 @@ const userModels = require('../models/models');
 
 const subscriber = require('../utils/subscriber');
 
+const isAdminAuth = require('../middleware/adminAuth');
+
 const route = express.Router();
 
 subscriber();
@@ -12,7 +14,7 @@ route.get('/', async (req, res) => {
   res.send('userdash');
 });
 
-route.get('/all', async (req, res) => {
+route.get('/all', isAdminAuth, async (req, res) => {
   const allUsers = await userModels.find();
   res.send(allUsers);
 });
