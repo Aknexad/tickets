@@ -1,6 +1,6 @@
 const amqp = require('amqplib');
 
-const userModels = require('../models/models');
+const { Match } = require('../models/models');
 
 async function subscriber() {
   const connection = await amqp.connect(process.env.AMQP_URL);
@@ -14,7 +14,7 @@ async function subscriber() {
   channel.bindQueue(
     q.queue,
     process.env.EXCHANGE_NAME,
-    process.env.BINDING_KEY
+    process.env.BINDING_KEY_TICKET_SELL
   );
 
   channel.consume(
@@ -23,10 +23,9 @@ async function subscriber() {
       if (msg.content) {
         const payload = msg.content.toString();
         const data = JSON.parse(payload);
-        const user = await userModels.findOne({ _id: data.userId });
-        user.tickets.push(data);
-        user.save();
-        console.log('send to user service');
+        const getMatch = await Match.findOne({ _id: data.matchId });
+        getMatch.totalTickets--;
+        getMatch.save();
       }
     },
     {

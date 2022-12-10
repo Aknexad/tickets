@@ -51,7 +51,7 @@ app.post('/ticket', userAuthToken, async (req, res) => {
     ticketStatus: false,
   });
   if (addTicket) {
-    publisher(addTicket);
+    publisher(addTicket, { event: 'removeTicket', matchId: matchId });
     res.json(addTicket);
   } else {
     res.sendStatus(400);

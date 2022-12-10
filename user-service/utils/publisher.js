@@ -2,7 +2,7 @@ const amqp = require('amqplib');
 
 async function emitLogs(payload) {
   const msg = payload;
-  const connection = await amqp.connect('amqp://localhost');
+  const connection = await amqp.connect(process.env.AMQP_URL);
   const channel = await connection.createChannel();
   await channel.assertExchange(process.env.EXCHANGE_NAME, 'direct', {
     durable: true,

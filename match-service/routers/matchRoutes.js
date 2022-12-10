@@ -3,8 +3,11 @@ const express = require('express');
 const route = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
 const publisher = require('../utils/publisher');
+const subscriber = require('../utils/subscriber');
 
 const { Match, Team, Stadium, MatchType } = require('../models/models');
+
+subscriber();
 
 // match
 route.get('/all', async (req, res) => {
